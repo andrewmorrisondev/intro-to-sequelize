@@ -1,4 +1,4 @@
-const { Dog, Feeding } = require('../models')
+const { Dog, Feeding, Toy, DogToy } = require('../models')
 
 const create = async (req, res) => {
   try {
@@ -13,7 +13,10 @@ const create = async (req, res) => {
 const index = async (req, res) => {
   try {
     const dogs = await Dog.findAll({
-      include: [{ model: Feeding, as: 'feedings' }]
+      include: [
+        { model: Feeding, as: 'feedings' },
+        { model: Toy, as: "toys", through: { attributes: [] } }
+      ]
     })
     res.status(200).json(dogs)
   } catch (error) {
@@ -54,10 +57,23 @@ const addFeeding = async (req, res) => {
   }
 }
 
+const associateToy = async (req, res) => {
+  try {
+    const { dogId, toyId } = req.params
+    const association = await DogToy.create({
+      dogId: dogId, toyId: toyId
+    })
+    res.status(200).json(association)
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
+
 module.exports = {
   create,
   index,
   update,
   delete: deleteDog,
   addFeeding,
+  associateToy,
 }

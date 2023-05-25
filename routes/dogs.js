@@ -7,5 +7,6 @@ router.put('/:dogId', dogsCtrl.update)
 router.delete('/:dogId', dogsCtrl.delete)
 
 router.post('/:dogId/feedings', dogsCtrl.addFeeding)
+router.post('/:dogId/toys/:toyId', dogsCtrl.associateToy)
 
 module.exports = router
